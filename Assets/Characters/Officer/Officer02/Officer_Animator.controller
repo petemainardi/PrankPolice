@@ -16,16 +16,16 @@ AnimatorState:
   m_IKOnFeet: 1
   m_WriteDefaultValues: 1
   m_Mirror: 0
-  m_SpeedParameterActive: 1
+  m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 8300744103595739083}
   m_Tag: 
-  m_SpeedParameter: MotionSpeed
+  m_SpeedParameter: Spood
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: Speed
+  m_TimeParameter: Spood
 --- !u!1101 &-5385646775738800079
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

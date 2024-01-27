@@ -16,16 +16,19 @@ public class FirstPersonMovement : NetworkBehaviour
     public KeyCode runningKey = KeyCode.LeftShift;
 
     Rigidbody _rigidbody;
+    private Pausable _pausable;
+    private Animator _anim;
+
     /// <summary> Functions to override movement speed. Will use the last added override. </summary>
     public List<System.Func<float>> speedOverrides = new List<System.Func<float>>();
+    private Vector2 _targetDir = Vector2.zero;
 
-
-    private Pausable _pausable;
 
     void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _pausable = FindFirstObjectByType<Pausable>();
+        _anim = GetComponentInChildren<Animator>();
     }
 
     public override void OnNetworkSpawn()
@@ -36,26 +39,26 @@ public class FirstPersonMovement : NetworkBehaviour
             return;
         }
         Destroy(GameObject.FindGameObjectWithTag("MainCamera"));
+        GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+    }
+
+    private void Update()
+    {
+        if (_pausable.IsPaused) return;
+
+        IsRunning = canRun && Input.GetKey(runningKey);
+        _targetDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
 
     void FixedUpdate()
     {
-        if (_pausable.IsPaused) return;
-
-        // Update IsRunning from input.
-        IsRunning = canRun && Input.GetKey(runningKey);
-
-        // Get targetMovingSpeed.
         float targetMovingSpeed = IsRunning ? runSpeed : speed;
         if (speedOverrides.Count > 0)
-        {
             targetMovingSpeed = speedOverrides[speedOverrides.Count - 1]();
-        }
 
-        // Get targetVelocity from input.
-        Vector2 targetVelocity =new Vector2( Input.GetAxis("Horizontal") * targetMovingSpeed, Input.GetAxis("Vertical") * targetMovingSpeed);
+        Vector2 targetVelocity = _targetDir.normalized * targetMovingSpeed ;
 
-        // Apply movement.
         _rigidbody.velocity = transform.rotation * new Vector3(targetVelocity.x, _rigidbody.velocity.y, targetVelocity.y);
+        _anim.SetFloat("Speed", _rigidbody.velocity.magnitude);
     }
 }

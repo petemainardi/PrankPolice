@@ -103,29 +103,36 @@ namespace PrankPolice
         }
         private async void PollLobbyForUpdate()
         {
-            if (_joinedLobby != null)
+            try
             {
-                _timerPoll -= Time.deltaTime;
-                if (_timerPoll < 0f)
+                if (_joinedLobby != null)
                 {
-                    _timerPoll = _pollTime;
-                    _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
-                    if (!_joinedLobby.Players.Any(p => p.Id == AuthenticationService.Instance.PlayerId))
-                        _joinedLobby = null;
-
-                    // Start game if relay code exists
-                    if (_joinedLobby != null && _joinedLobby.Data["RelayCode"].Value != "0")
+                    _timerPoll -= Time.deltaTime;
+                    if (_timerPoll < 0f)
                     {
-                        // Join relay if not the host (which will have already started the relay)
-                        if (_joinedLobby.Data["Host"].Value != AuthenticationService.Instance.PlayerId)
-                            await JoinRelay(_joinedLobby.Data["RelayCode"].Value);
+                        _timerPoll = _pollTime;
+                        _joinedLobby = await LobbyService.Instance.GetLobbyAsync(_joinedLobby.Id);
+                        if (!_joinedLobby.Players.Any(p => p.Id == AuthenticationService.Instance.PlayerId))
+                            _joinedLobby = null;
 
-                        _joinedLobby = null;
-                        GameStarted.Invoke();
+                        // Start game if relay code exists
+                        if (_joinedLobby != null && _joinedLobby.Data["RelayCode"].Value != "0")
+                        {
+                            // Join relay if not the host (which will have already started the relay)
+                            if (_joinedLobby.Data["Host"].Value != AuthenticationService.Instance.PlayerId)
+                                await JoinRelay(_joinedLobby.Data["RelayCode"].Value);
+
+                            _joinedLobby = null;
+                            GameStarted.Invoke();
+                        }
+                        else
+                            LobbyJoined.Invoke(_joinedLobby);
                     }
-                    else
-                        LobbyJoined.Invoke(_joinedLobby);
                 }
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.LogWarning(e);
             }
         }
         // ========================================================================================
