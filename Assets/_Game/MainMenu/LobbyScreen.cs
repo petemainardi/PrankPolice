@@ -71,7 +71,7 @@ namespace PrankPolice
 
             Player2.gameObject.SetActive(lobby.Players.Count > 1);
             if (Player2.gameObject.activeInHierarchy)
-                InitPreview(lobby.Players[1], Player1);
+                InitPreview(lobby.Players[1], Player2);
 
             StartGameButton.gameObject.SetActive(isHost);
         }

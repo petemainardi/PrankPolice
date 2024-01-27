@@ -36,8 +36,8 @@ namespace PrankPolice
             Name.text = name;
             ID = id;
 
-            KickButton.gameObject.SetActive(!string.IsNullOrEmpty(id));
             KickButton.onClick.RemoveAllListeners();
+            KickButton.gameObject.SetActive(!string.IsNullOrEmpty(id));
         }
         // ========================================================================================
 	}
