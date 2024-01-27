@@ -2,6 +2,7 @@
 using Unity.Netcode;
 using ThatNamespace;
 using PrankPolice;
+using System.Linq;
 
 public class FirstPersonLook : NetworkBehaviour
 {
@@ -18,7 +19,17 @@ public class FirstPersonLook : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsOwner)
-            Destroy(this.gameObject);
+        {
+            enabled = false;
+            foreach (Component c in gameObject.GetComponents(typeof(Component)).Reverse())
+            {
+                if (c == this || c.GetType().IsAssignableFrom(typeof(Transform)))
+                    continue;
+                Destroy(c);
+            }
+            return;
+        }
+
 
         Cursor.lockState = CursorLockMode.Locked;
     }

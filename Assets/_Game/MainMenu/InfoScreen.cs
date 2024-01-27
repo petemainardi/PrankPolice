@@ -122,6 +122,7 @@ namespace PrankPolice
                             if (_joinedLobby.Data["Host"].Value != AuthenticationService.Instance.PlayerId)
                                 await JoinRelay(_joinedLobby.Data["RelayCode"].Value);
 
+                            LobbyScreen.StartGame();
                             _joinedLobby = null;
                             GameStarted.Invoke();
                         }

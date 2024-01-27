@@ -1,7 +1,8 @@
 ﻿using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 
-public class FirstPersonAudio : MonoBehaviour
+public class FirstPersonAudio : NetworkBehaviour
 {
     public FirstPersonMovement character;
     public GroundCheck groundCheck;
@@ -31,6 +32,12 @@ public class FirstPersonAudio : MonoBehaviour
 
     AudioSource[] MovingAudios => new AudioSource[] { stepAudio, runningAudio, crouchedAudio };
 
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner)
+            enabled = false;
+    }
 
     void Reset()
     {

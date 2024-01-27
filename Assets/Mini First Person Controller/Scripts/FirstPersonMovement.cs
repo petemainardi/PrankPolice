@@ -35,11 +35,11 @@ public class FirstPersonMovement : NetworkBehaviour
     {
         if (!IsOwner)
         {
-            Destroy(this);
+            enabled = false;
             return;
         }
         Destroy(GameObject.FindGameObjectWithTag("MainCamera"));
-        GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+        GetComponentInChildren<SkinnedMeshRenderer>().renderingLayerMask = 0;
     }
 
     private void Update()
