@@ -7,7 +7,6 @@ using Unity.Services.Lobbies.Models;
 using TMPro;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
-using UnityEngine.SceneManagement;
 
 #pragma warning disable 0649    // Variable declared but never assigned to
 

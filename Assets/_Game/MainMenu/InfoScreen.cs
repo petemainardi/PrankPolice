@@ -1,20 +1,19 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
-using Unity.Services.Authentication;
-using Unity.Services.Core;
-using Unity.Services.Lobbies.Models;
-using Unity.Services.Lobbies;
 using UnityEngine.Events;
-using TMPro;
-using Unity.Services.Relay.Models;
-using Unity.Services.Relay;
+using UnityEngine.UI;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
-using System.Threading.Tasks;
-using UnityEngine.SceneManagement;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
+using Unity.Services.Relay.Models;
+using Unity.Services.Relay;
+using TMPro;
 
 #pragma warning disable 0649    // Variable declared but never assigned to
 

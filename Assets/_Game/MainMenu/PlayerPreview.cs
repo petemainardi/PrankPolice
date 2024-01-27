@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.Services.Authentication;
-using Unity.Services.Lobbies.Models;
-using Unity.Services.Lobbies;
 
 #pragma warning disable 0649    // Variable declared but never assigned to
 
