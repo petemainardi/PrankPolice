@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 #pragma warning disable 0649    // Variable declared but never assigned to
 
@@ -19,28 +17,24 @@ namespace PrankPolice
     // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     // ============================================================================================
 
-	public class PlayerPreview : MonoBehaviour
-	{
-        // ========================================================================================
-        // Fields
-        // ========================================================================================
-        [SerializeField] public TMP_Text Name;
-        [SerializeField] public Button KickButton;
-
-        public string ID { get; private set; } = "";
-        // ========================================================================================
-        // Methods
-        // ========================================================================================
-		public void Init(string name, string id)
+    public class Pausable : MonoBehaviour
+    {
+        public event Action<bool> PausedChanged;
+        private bool _paused;
+        public bool IsPaused
         {
-            Name.text = name;
-            ID = id;
+            get => _paused;
+            set
+            {
+                if (_paused != value)
+                {
+                    _paused = value;
+                    PausedChanged?.Invoke(_paused);
+                }
+            }
 
-            KickButton.onClick.RemoveAllListeners();
-            KickButton.gameObject.SetActive(!string.IsNullOrEmpty(id));
         }
-        // ========================================================================================
-	}
+    }
     // ============================================================================================
     // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     // ============================================================================================
