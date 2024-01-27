@@ -28,7 +28,7 @@ namespace PrankPolice
             NetworkManager.Singleton.StartHost();
             Destroy(this.gameObject);
         }
-        // ------------------------------------------------------------------------------
+        // ----------------------------------------------------------------------------------------
         public void ConnectAsClient()
         {
             NetworkManager.Singleton.StartClient();

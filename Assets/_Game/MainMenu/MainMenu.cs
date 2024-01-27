@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
 
 #pragma warning disable 0649    // Variable declared but never assigned to
 
@@ -18,43 +17,35 @@ namespace PrankPolice
     // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     // ============================================================================================
 
-	public class PlayerNetwork : NetworkBehaviour
+	public class MainMenu : MonoBehaviour
 	{
         // ========================================================================================
         // Fields
         // ========================================================================================
-        [SerializeField] private float _moveSpeed = 5f;
+        [SerializeField] private GameObject Title;
 
-        // ========================================================================================
-        // Mono
-        // ========================================================================================
-        public override void OnNetworkSpawn()
-        {
-            if (!IsOwner) Destroy(this);
-        }
-        // ----------------------------------------------------------------------------------------
-        void Update()
-        {
-            if (!IsOwner) return;
-
-            Vector3 moveDir = Vector3.zero;
-            if (Input.GetKey(KeyCode.A))
-                moveDir.x -= 1;
-            if (Input.GetKey(KeyCode.D))
-                moveDir.x += 1;
-            if (Input.GetKey(KeyCode.W))
-                moveDir.z += 1;
-            if (Input.GetKey(KeyCode.S))
-                moveDir.z -= 1;
-
-            transform.position += moveDir.normalized * _moveSpeed * Time.deltaTime;
-        }
+        [SerializeField] private InfoScreen InfoScreen;
         // ========================================================================================
         // Methods
         // ========================================================================================
-		
+        void Start ()
+        {
+
+        }
+
+		public static void Quit() => Application.Quit();
+
+        public void StartSingleplayerGame()
+        {
+
+        }
+
+        private void OnStart()
+        {
+
+        }
         // ========================================================================================
-	}
+    }
     // ============================================================================================
     // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     // ============================================================================================

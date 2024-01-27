@@ -2,7 +2,11 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
+using UnityEngine.UI;
+using TMPro;
+using Unity.Services.Authentication;
+using Unity.Services.Lobbies.Models;
+using Unity.Services.Lobbies;
 
 #pragma warning disable 0649    // Variable declared but never assigned to
 
@@ -18,41 +22,26 @@ namespace PrankPolice
     // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     // ============================================================================================
 
-	public class PlayerNetwork : NetworkBehaviour
+	public class PlayerPreview : MonoBehaviour
 	{
         // ========================================================================================
         // Fields
         // ========================================================================================
-        [SerializeField] private float _moveSpeed = 5f;
+        [SerializeField] public TMP_Text Name;
+        [SerializeField] public Button KickButton;
 
-        // ========================================================================================
-        // Mono
-        // ========================================================================================
-        public override void OnNetworkSpawn()
-        {
-            if (!IsOwner) Destroy(this);
-        }
-        // ----------------------------------------------------------------------------------------
-        void Update()
-        {
-            if (!IsOwner) return;
-
-            Vector3 moveDir = Vector3.zero;
-            if (Input.GetKey(KeyCode.A))
-                moveDir.x -= 1;
-            if (Input.GetKey(KeyCode.D))
-                moveDir.x += 1;
-            if (Input.GetKey(KeyCode.W))
-                moveDir.z += 1;
-            if (Input.GetKey(KeyCode.S))
-                moveDir.z -= 1;
-
-            transform.position += moveDir.normalized * _moveSpeed * Time.deltaTime;
-        }
+        public string ID { get; private set; } = "";
         // ========================================================================================
         // Methods
         // ========================================================================================
-		
+		public void Init(string name, string id)
+        {
+            Name.text = name;
+            ID = id;
+
+            KickButton.gameObject.SetActive(!string.IsNullOrEmpty(id));
+            KickButton.onClick.RemoveAllListeners();
+        }
         // ========================================================================================
 	}
     // ============================================================================================
