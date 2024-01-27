@@ -63,6 +63,7 @@ namespace PrankPolice
         {
             _gameStarted = true;
             QuitButton.gameObject.SetActive(false);
+            Title.SetActive(false);
         }
         // ========================================================================================
     }
