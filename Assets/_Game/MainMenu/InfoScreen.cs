@@ -192,6 +192,10 @@ namespace PrankPolice
             LobbyValidationMessage.SetActive(false);
             if (!ValidatePlayerName()) return;
 
+            bool codeExists = PlayerName.text.Length > 0;
+            LobbyValidationMessage.SetActive(!codeExists);
+            if (!codeExists) return;
+
             try
             {
                 EnableButtons(false);

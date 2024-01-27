@@ -1761,6 +1761,7 @@ GameObject:
   - component: {fileID: 355419708234189857}
   - component: {fileID: 5869234161413226892}
   - component: {fileID: 2242345090430681314}
+  - component: {fileID: 2845916464859235586}
   m_Layer: 5
   m_Name: Menu UI
   m_TagString: Untagged
@@ -1869,7 +1870,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Title: {fileID: 6577668590729150320}
+  QuitButton: {fileID: 6245902843922811550}
   InfoScreen: {fileID: 6104001374670097544}
+--- !u!114 &2845916464859235586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2676033499187295435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1d0059f7dfa26643ab30a2cedf3dd84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2995285632324077409
 GameObject:
   m_ObjectHideFlags: 0
