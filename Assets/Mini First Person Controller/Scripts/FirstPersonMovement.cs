@@ -70,7 +70,7 @@ public class FirstPersonMovement : NetworkBehaviour
                 _rigidbody.constraints = _rigidbody.constraints | RigidbodyConstraints.FreezeRotationY;
             }
 
+            _anim.SetFloat("Speed", _rigidbody.velocity.magnitude);
         }
-        _anim.SetFloat("Speed", _rigidbody.velocity.magnitude);
     }
 }

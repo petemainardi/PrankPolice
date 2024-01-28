@@ -24,6 +24,8 @@ namespace PrankPolice
         {
             _agent = GetComponent<NavMeshAgent>();
             _linker = GetComponent<Linkable>();
+
+
             _linker.LinkedChanged += linked => { _agent.enabled = false; };
             _linker.LinkedChanged += linked =>
             {
@@ -70,7 +72,7 @@ namespace PrankPolice
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.tag == "Ground")
+            if (IsOwner && collision.gameObject.tag == "Ground")
                 _agent.enabled = true;
         }
     }

@@ -36,6 +36,8 @@ namespace PrankPolice
 
         private void OnTriggerEnter(Collider other)
         {
+            if (!IsOwner || !other.GetComponent<Linkable>()) return;
+
             Vector3 contactPos = _collider.ClosestPointOnBounds(other.transform.position);
             Destroy(other.gameObject);
             DestroyedClientRpc(contactPos, (this.transform.position - contactPos).normalized);

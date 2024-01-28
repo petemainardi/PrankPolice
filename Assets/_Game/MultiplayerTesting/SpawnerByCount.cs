@@ -30,7 +30,7 @@ namespace PrankPolice
         public float Delay = 1.0f;
         private float _timer = -1.0f;
 
-        [SerializeField] private Transform Spawnable;
+        [SerializeField] private Transform[] Spawnables;
         [SerializeField] private Transform SpawnLocation;
         // ========================================================================================
         // Mono
@@ -61,7 +61,8 @@ namespace PrankPolice
         // ========================================================================================
 		public void Spawn()
         {
-            Transform obj = Instantiate(Spawnable, SpawnLocation.position, Quaternion.identity);
+            int index = UnityEngine.Random.Range(0, Spawnables.Length);
+            Transform obj = Instantiate(Spawnables[index], SpawnLocation.position, Quaternion.identity);
             obj.GetComponent<NetworkObject>().Spawn();
 
             if (!obj.TryGetComponent(out DestroyNotification onDestroy))

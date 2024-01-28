@@ -29,7 +29,8 @@ namespace PrankPolice
         // ========================================================================================
         private void OnTriggerExit(Collider other)
         {
-            Destroy(other.gameObject);
+            if (other.tag != "Respawn")
+                Destroy(other.gameObject);
         }
         // ========================================================================================
     }
