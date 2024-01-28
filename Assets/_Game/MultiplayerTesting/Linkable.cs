@@ -58,7 +58,7 @@ namespace PrankPolice
         // ========================================================================================
         // Methods
         // ========================================================================================
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
 		public void LinkServerRpc(NetworkBehaviourReference transformToLink)
         {
             if (_linkedTo != null || !transformToLink.TryGet(out ClientNetworkTransform t)) return;
@@ -74,7 +74,7 @@ namespace PrankPolice
         public void Link(ClientNetworkTransform transformToLink) =>
             LinkServerRpc(new NetworkBehaviourReference(transformToLink));
         // ----------------------------------------------------------------------------------------
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         public void UnlinkServerRpc(Vector3 initialVelocity)
         {
             _linkedTo = null;
