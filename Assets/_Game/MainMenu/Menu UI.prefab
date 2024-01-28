@@ -1872,6 +1872,8 @@ MonoBehaviour:
   Title: {fileID: 6577668590729150320}
   QuitButton: {fileID: 6245902843922811550}
   InfoScreen: {fileID: 6104001374670097544}
+  SelectScreen: {fileID: 161056967607506323}
+  Spawner: {fileID: 0}
 --- !u!114 &2845916464859235586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5331,7 +5333,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2242345090430681314}
         m_TargetAssemblyTypeName: PrankPolice.MainMenu, Assembly-CSharp
         m_MethodName: StartSingleplayerGame
         m_Mode: 1
@@ -6956,7 +6958,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: This is where we'll tell the player what the game is and how to play...........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+  m_text: 'Prank paraphernalia is polluting the plaza! Catch all these runaway toys
+    and throw them back in the toybox where they belong.
+
+
+
+    Run around with WASD,
+    hold shift to sprint, left click to grab things. While holding something, right-click
+    to drop it, hold and release left-click to throw it.
+
+
+    It''ll probably be
+    easier if you have a friend to help bring the toybox along with you...'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

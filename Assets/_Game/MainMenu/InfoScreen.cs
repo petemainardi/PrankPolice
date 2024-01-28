@@ -72,7 +72,7 @@ namespace PrankPolice
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
-            CreateLobbyButton.onClick.AddListener(CreateLobby);
+            CreateLobbyButton.onClick.AddListener(() => _ = CreateLobby());
             NameValidationMessage.SetActive(false);
 
             JoinLobbyButton.onClick.AddListener(JoinLobby);
@@ -164,7 +164,7 @@ namespace PrankPolice
         // ========================================================================================
         // Lobby Methods
         // ========================================================================================
-        private async void CreateLobby()
+        public async Task CreateLobby()
         {
             LobbyValidationMessage.SetActive(false);
             if (!ValidatePlayerName()) return;
@@ -272,7 +272,6 @@ namespace PrankPolice
                     alloc.ConnectionData
                     );
 
-                //_ = SceneManager.LoadSceneAsync("MultiplayerTestbed");
                 NetworkManager.Singleton.StartHost();
                 return joinCode;
             }
@@ -296,7 +295,6 @@ namespace PrankPolice
                     alloc.HostConnectionData
                     );
 
-                //_ = SceneManager.LoadSceneAsync("MultiplayerTestbed");
                 NetworkManager.Singleton.StartClient();
             }
             catch (RelayServiceException e)
