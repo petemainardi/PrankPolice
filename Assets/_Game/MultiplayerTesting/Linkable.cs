@@ -75,16 +75,18 @@ namespace PrankPolice
             LinkServerRpc(new NetworkBehaviourReference(transformToLink));
         // ----------------------------------------------------------------------------------------
         [ServerRpc(RequireOwnership = false)]
-        public void UnlinkServerRpc(Vector3 initialVelocity)
+        public void UnlinkServerRpc(Vector3 initialVelocity, Vector3 initialRotation)
         {
             _linkedTo = null;
             _collider.enabled = true;
             _rb.useGravity = _defaultGravity;
             _rb.constraints = _defaultConstraints;
             _rb.velocity = initialVelocity;
+            _rb.angularVelocity = initialRotation;
         }
-        public void Unlink() => UnlinkServerRpc(Vector3.zero);
-        public void Unlink(Vector3 initialVelocity) => UnlinkServerRpc(initialVelocity);
+        public void Unlink() => UnlinkServerRpc(Vector3.zero, Vector3.zero);
+        public void Unlink(Vector3 initialVelocity, Vector3 initialRotation) =>
+            UnlinkServerRpc(initialVelocity, initialRotation);
         // ========================================================================================
 	}
     // ============================================================================================

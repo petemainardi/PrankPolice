@@ -128,7 +128,7 @@ namespace PrankPolice
                 ;
             aimDir = (aimDir - Hand.transform.position).normalized;
 
-            _throwItem.Unlink(aimDir * speed);
+            _throwItem.Unlink(aimDir * speed, UnityEngine.Random.rotation.eulerAngles);
             _throwItem = null;
         }
         // ========================================================================================
