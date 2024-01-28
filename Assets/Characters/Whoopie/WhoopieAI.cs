@@ -12,6 +12,8 @@ namespace PrankPolice
     [RequireComponent(typeof(Linkable))]
     public class WhoopieAI : NetworkBehaviour
     {
+        public float speed = 5;
+
         private NavMeshAgent _agent;
         private Linkable _linker;
 
@@ -19,6 +21,9 @@ namespace PrankPolice
 
         private Transform[] _players;
         private Transform _target;
+
+        private Animator _anim;
+        Rigidbody _rigidbody;
 
         // Start is called before the first frame update
         void Awake()
@@ -35,6 +40,11 @@ namespace PrankPolice
                 else
                     Debug.Log($"Unlinking {this.name}");
             };
+
+            _anim = GetComponentInChildren<Animator>();
+            Debug.Log(_anim);
+
+            _rigidbody = GetComponent<Rigidbody>();
         }
 
         public override void OnNetworkSpawn()
@@ -79,7 +89,10 @@ namespace PrankPolice
                 }
                 _agent.SetDestination(_target.position);
             }
+
+            _anim.SetFloat("Speed", _rigidbody.velocity.magnitude);
         }
+
 
         private void OnCollisionEnter(Collision collision)
         {
