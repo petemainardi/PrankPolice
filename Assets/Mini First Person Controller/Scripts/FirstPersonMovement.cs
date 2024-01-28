@@ -16,6 +16,7 @@ public class FirstPersonMovement : NetworkBehaviour
     public KeyCode runningKey = KeyCode.LeftShift;
 
     Rigidbody _rigidbody;
+    private RigidbodyConstraints _defaultConstraints;
     private Pausable _pausable;
     private Animator _anim;
 
@@ -27,24 +28,22 @@ public class FirstPersonMovement : NetworkBehaviour
     void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _defaultConstraints = _rigidbody.constraints;
         _pausable = FindFirstObjectByType<Pausable>();
         _anim = GetComponentInChildren<Animator>();
     }
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner)
-        {
-            enabled = false;
-            return;
-        }
+        if (!IsOwner) return;
+
         Destroy(GameObject.FindGameObjectWithTag("MainCamera"));
         GetComponentInChildren<SkinnedMeshRenderer>().renderingLayerMask = 0;
     }
 
     private void Update()
     {
-        if (_pausable.IsPaused) return;
+        if (!IsOwner || _pausable.IsPaused) return;
 
         IsRunning = canRun && Input.GetKey(runningKey);
         _targetDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -52,13 +51,26 @@ public class FirstPersonMovement : NetworkBehaviour
 
     void FixedUpdate()
     {
-        float targetMovingSpeed = IsRunning ? runSpeed : speed;
-        if (speedOverrides.Count > 0)
-            targetMovingSpeed = speedOverrides[speedOverrides.Count - 1]();
+        if (IsOwner)
+        {
+            if (!_pausable.IsPaused)
+            {
+                _rigidbody.constraints = _defaultConstraints;
 
-        Vector2 targetVelocity = _targetDir.normalized * targetMovingSpeed ;
+                float targetMovingSpeed = IsRunning ? runSpeed : speed;
+                if (speedOverrides.Count > 0)
+                    targetMovingSpeed = speedOverrides[speedOverrides.Count - 1]();
 
-        _rigidbody.velocity = transform.rotation * new Vector3(targetVelocity.x, _rigidbody.velocity.y, targetVelocity.y);
+                Vector2 targetVelocity = _targetDir.normalized * targetMovingSpeed;
+                _rigidbody.velocity = transform.rotation * new Vector3(targetVelocity.x, _rigidbody.velocity.y, targetVelocity.y);
+            }
+            else
+            {
+                _rigidbody.velocity = Vector2.zero;
+                _rigidbody.constraints = _rigidbody.constraints | RigidbodyConstraints.FreezeRotationY;
+            }
+
+        }
         _anim.SetFloat("Speed", _rigidbody.velocity.magnitude);
     }
 }

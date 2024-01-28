@@ -2,9 +2,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using ThatNamespace;
-using Unity.Netcode;
 
 #pragma warning disable 0649    // Variable declared but never assigned to
 
@@ -19,57 +16,20 @@ namespace PrankPolice
     // ============================================================================================
     // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     // ============================================================================================
-
-	public class MainMenu : MonoBehaviour
+    [RequireComponent(typeof(Collider))]
+	public class Despawner : MonoBehaviour
 	{
         // ========================================================================================
         // Fields
         // ========================================================================================
-        [SerializeField] private GameObject Title;
 
-        [SerializeField] private Button QuitButton;
-        [SerializeField] private InfoScreen InfoScreen;
-        private bool _gameStarted = false;
 
-        private Pausable _pausable;
-
-        [SerializeField] private SpawnerByCount Spawner;
         // ========================================================================================
         // Methods
         // ========================================================================================
-        private void Awake()
+        private void OnTriggerExit(Collider other)
         {
-            _pausable = GetComponent<Pausable>();
-            _pausable.PausedChanged += paused => QuitButton.gameObject.SetActive(paused);
-        }
-        void Start ()
-        {
-            InfoScreen.GameStarted.AddListener(OnStart);
-        }
-
-        private void Update()
-        {
-            if (!_gameStarted) return;
-
-            if (Input.GetButtonDown("Pause"))
-                _pausable.IsPaused = !_pausable.IsPaused;
-        }
-
-        public static void Quit() => Application.Quit();
-
-        public void StartSingleplayerGame()
-        {
-
-        }
-
-        private void OnStart()
-        {
-            _gameStarted = true;
-            QuitButton.gameObject.SetActive(false);
-            Title.SetActive(false);
-
-            if (NetworkManager.Singleton.IsHost)
-                Spawner.enabled = true;
+            Destroy(other.gameObject);
         }
         // ========================================================================================
     }

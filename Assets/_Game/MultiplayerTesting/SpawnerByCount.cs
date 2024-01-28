@@ -2,9 +2,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using ThatNamespace;
 using Unity.Netcode;
+using PrankPolice;
 
 #pragma warning disable 0649    // Variable declared but never assigned to
 
@@ -20,59 +19,60 @@ namespace PrankPolice
     // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     // ============================================================================================
 
-	public class MainMenu : MonoBehaviour
+	public class SpawnerByCount : MonoBehaviour
 	{
         // ========================================================================================
         // Fields
         // ========================================================================================
-        [SerializeField] private GameObject Title;
+        public int MaxCount = 1;
+        private int _count = 0;
 
-        [SerializeField] private Button QuitButton;
-        [SerializeField] private InfoScreen InfoScreen;
-        private bool _gameStarted = false;
+        public float Delay = 1.0f;
+        private float _timer = -1.0f;
 
-        private Pausable _pausable;
+        [SerializeField] private Transform Spawnable;
+        [SerializeField] private Transform SpawnLocation;
+        // ========================================================================================
+        // Mono
+        // ========================================================================================
+        void Awake()
+        {
+            _timer = Delay;
+        }
+        // ----------------------------------------------------------------------------------------
+        //void Start()
+        //{
 
-        [SerializeField] private SpawnerByCount Spawner;
+        //}
+        // ----------------------------------------------------------------------------------------
+        void Update()
+		{
+			if (_count < MaxCount)
+            {
+                _timer -= Time.deltaTime;
+                if (_timer < 0.0f)
+                {
+                    Spawn();
+                }
+            }
+		}
         // ========================================================================================
         // Methods
         // ========================================================================================
-        private void Awake()
+		public void Spawn()
         {
-            _pausable = GetComponent<Pausable>();
-            _pausable.PausedChanged += paused => QuitButton.gameObject.SetActive(paused);
-        }
-        void Start ()
-        {
-            InfoScreen.GameStarted.AddListener(OnStart);
-        }
+            Transform obj = Instantiate(Spawnable, SpawnLocation.position, Quaternion.identity);
+            obj.GetComponent<NetworkObject>().Spawn();
 
-        private void Update()
-        {
-            if (!_gameStarted) return;
+            if (!obj.TryGetComponent(out DestroyNotification onDestroy))
+                onDestroy = obj.gameObject.AddComponent<DestroyNotification>();
+            onDestroy.Destroyed += _ => _count--;
 
-            if (Input.GetButtonDown("Pause"))
-                _pausable.IsPaused = !_pausable.IsPaused;
-        }
-
-        public static void Quit() => Application.Quit();
-
-        public void StartSingleplayerGame()
-        {
-
-        }
-
-        private void OnStart()
-        {
-            _gameStarted = true;
-            QuitButton.gameObject.SetActive(false);
-            Title.SetActive(false);
-
-            if (NetworkManager.Singleton.IsHost)
-                Spawner.enabled = true;
+            _count++;
+            _timer = Delay;
         }
         // ========================================================================================
-    }
+	}
     // ============================================================================================
     // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     // ============================================================================================

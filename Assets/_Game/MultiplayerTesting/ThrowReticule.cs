@@ -3,8 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using ThatNamespace;
-using Unity.Netcode;
 
 #pragma warning disable 0649    // Variable declared but never assigned to
 
@@ -19,60 +17,55 @@ namespace PrankPolice
     // ============================================================================================
     // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     // ============================================================================================
-
-	public class MainMenu : MonoBehaviour
+    [RequireComponent(typeof(Image))]
+	public class ThrowReticule : MonoBehaviour
 	{
         // ========================================================================================
         // Fields
         // ========================================================================================
-        [SerializeField] private GameObject Title;
+        private RectTransform _rt;
+        [SerializeField] private Thrower Thrower;
+        private Image _image;
 
-        [SerializeField] private Button QuitButton;
-        [SerializeField] private InfoScreen InfoScreen;
-        private bool _gameStarted = false;
+        [SerializeField] private int MaxScale = 8;
+        [SerializeField] private int MinScale = 1;
 
-        private Pausable _pausable;
+        // ========================================================================================
+        // Mono
+        // ========================================================================================
+		void Awake()
+		{
+            _rt = GetComponent<RectTransform>();
+			_image = GetComponent<Image>();
+		}
+        // ----------------------------------------------------------------------------------------
+		void Start()
+		{
+            _image.enabled = false;
+            Thrower.ThrowForceChanged += percent =>
+            {
+                _image.enabled = percent > 0;
+                if (_image.enabled)
+                {
+                    _rt.localScale = Vector3.one * NormalizedScale(1 - percent);
+                }
+            };
+		}
 
-        [SerializeField] private SpawnerByCount Spawner;
+        // ----------------------------------------------------------------------------------------
+  //      void Update()
+		//{
+			
+		//}
         // ========================================================================================
         // Methods
         // ========================================================================================
-        private void Awake()
+		public float NormalizedScale(float percent)
         {
-            _pausable = GetComponent<Pausable>();
-            _pausable.PausedChanged += paused => QuitButton.gameObject.SetActive(paused);
-        }
-        void Start ()
-        {
-            InfoScreen.GameStarted.AddListener(OnStart);
-        }
-
-        private void Update()
-        {
-            if (!_gameStarted) return;
-
-            if (Input.GetButtonDown("Pause"))
-                _pausable.IsPaused = !_pausable.IsPaused;
-        }
-
-        public static void Quit() => Application.Quit();
-
-        public void StartSingleplayerGame()
-        {
-
-        }
-
-        private void OnStart()
-        {
-            _gameStarted = true;
-            QuitButton.gameObject.SetActive(false);
-            Title.SetActive(false);
-
-            if (NetworkManager.Singleton.IsHost)
-                Spawner.enabled = true;
+            return MinScale + (MaxScale - MinScale) * percent;
         }
         // ========================================================================================
-    }
+	}
     // ============================================================================================
     // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
     // ============================================================================================
