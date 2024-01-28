@@ -714,7 +714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Camera: {fileID: 5239100585477912294}
-  Hand: {fileID: 8529389852711582989}
+  Hand: {fileID: 7947476532485048168}
   AimTarget: {fileID: 1325720888097616654}
   MinFocusAimHeight: 6
   ThrowSpeed: 12
@@ -1170,6 +1170,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6720f41709f287c418bd51b5370e49b8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4554291182535919716}
+    - targetCorrespondingSourceObject: {fileID: 7468608925220316739, guid: 6720f41709f287c418bd51b5370e49b8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7947476532485048168}
   m_SourcePrefab: {fileID: 100100000, guid: 6720f41709f287c418bd51b5370e49b8, type: 3}
 --- !u!4 &148547883627942290 stripped
 Transform:
@@ -1217,8 +1220,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 2213123550633611444}
---- !u!4 &8529389852711582989 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -874969228853441676, guid: 6720f41709f287c418bd51b5370e49b8, type: 3}
+--- !u!1 &7070883143077285946 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7468608925220316739, guid: 6720f41709f287c418bd51b5370e49b8, type: 3}
   m_PrefabInstance: {fileID: 397731830712432249}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7947476532485048168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7070883143077285946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 0
+  SyncRotAngleY: 0
+  SyncRotAngleZ: 0
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0

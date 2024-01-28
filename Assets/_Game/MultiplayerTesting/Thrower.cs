@@ -7,6 +7,7 @@ using TMPro;
 using PrankPolice;
 using ThatNamespace;
 using UnityEditor.Rendering.BuiltIn.ShaderGraph;
+using Unity.Multiplayer.Samples.Utilities.ClientAuthority;
 
 #pragma warning disable 0649    // Variable declared but never assigned to
 
@@ -30,7 +31,7 @@ namespace PrankPolice
         private Pausable _pausable;
 
         [SerializeField] private Transform Camera;
-        [SerializeField] private Transform Hand;
+        [SerializeField] private ClientNetworkTransform Hand;
         [SerializeField] private Transform AimTarget;
         [SerializeField] private float MinFocusAimHeight = 6;
         [SerializeField] private float ThrowSpeed = 12;
@@ -48,18 +49,26 @@ namespace PrankPolice
         // ========================================================================================
         // Mono
         // ========================================================================================
-		void Awake()
-		{
-		}
+        //public override void OnNetworkSpawn()
+        //{
+        //    if (!Hand.TryGetComponent(out ClientNetworkTransform netTransform))
+        //    {
+        //        Hand.gameObject.AddComponent<NetworkObject>();
+        //        netTransform = Hand.gameObject.AddComponent<ClientNetworkTransform>();
+        //        netTransform.SyncPositionX = true;
+        //        netTransform.SyncPositionY = true;
+        //        netTransform.
+        //    }
+        //}
         // ----------------------------------------------------------------------------------------
-		void Start()
+        void Start()
 		{
 			_pausable = FindFirstObjectByType<Pausable>();
 		}
         // ----------------------------------------------------------------------------------------
 		void Update()
 		{
-            if (_pausable.IsPaused) return;
+            if (!IsOwner || _pausable.IsPaused) return;
 
             // Drop held item
             if (Input.GetButton("Fire2") && _throwItem != null)
@@ -100,28 +109,14 @@ namespace PrankPolice
             if (throwable == null) return;
 
             if (_throwItem != null)
-            {
-                //_throwItem.transform.SetParent(null);
-                //_throwItem.GetComponent<Collider>().enabled = true;
                 _throwItem.Unlink();
-            }
             _throwItem = throwable;
-            //_throwItem.GetComponent<Collider>().enabled = false;
-            //_throwItem.velocity = Vector3.zero;
-            //_throwItem.angularVelocity = Vector3.zero;
-            //_throwItem.transform.SetParent(Hand);
-            //_throwItem.transform.localPosition = Vector3.zero;
-            //_throwItem.transform.localRotation = Quaternion.identity;
             _throwItem.Link(Hand);
         }
-
+        // ----------------------------------------------------------------------------------------
         public void Throw(float focusPercent)
         {
             if (_throwItem == null) return;
-
-            //_throwItem.transform.SetParent(null);
-            //_throwItem.GetComponent<Collider>().enabled = true;
-            _throwItem.Unlink();
 
             float speed = ThrowSpeed + (focusPercent * ThrowSpeed);
 
@@ -131,9 +126,9 @@ namespace PrankPolice
                 + AimTarget.up * noiseDir.y
                 + AimTarget.up * (MinFocusAimHeight - AimTarget.localPosition.y) * (1 - focusPercent)
                 ;
-            aimDir = (aimDir - Hand.position).normalized;
+            aimDir = (aimDir - Hand.transform.position).normalized;
 
-            _throwItem.Rigidbody.velocity = aimDir * speed;
+            _throwItem.Unlink(aimDir * speed);
             _throwItem = null;
         }
         // ========================================================================================
