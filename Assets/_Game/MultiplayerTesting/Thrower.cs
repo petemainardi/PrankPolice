@@ -92,6 +92,7 @@ namespace PrankPolice
                     //if (picked.rigidbody != null)
                     //    PickUp(picked.transform.GetComponent<Linkable>());
 
+                    GrabCollider.Colliders = GrabCollider.Colliders.Where(c => c != null).ToList();
                     Collider target = GrabCollider.Colliders.FirstOrDefault(c => c.GetComponent<Linkable>());
                     if (target != null)
                     {

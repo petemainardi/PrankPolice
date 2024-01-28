@@ -18,6 +18,7 @@ namespace PrankPolice
         public float EnemyDistanceRun = 4.0f;
 
         private Transform[] _players;
+        private Transform _target;
 
         // Start is called before the first frame update
         void Awake()
@@ -67,6 +68,16 @@ namespace PrankPolice
                 Vector3 newPos = transform.position + dirToPlayer;
 
                 _agent.SetDestination(newPos);
+                _target = null;
+            }
+            else
+            {
+                if (_target == null || (_target.position - transform.position).sqrMagnitude < 10)
+                {
+                    var targets = FindObjectsByType<SpawnerByCount>(0);
+                    _target = targets[Random.Range(0, targets.Length)].transform;
+                }
+                _agent.SetDestination(_target.position);
             }
         }
 
