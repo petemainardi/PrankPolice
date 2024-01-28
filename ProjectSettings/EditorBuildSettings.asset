@@ -8,5 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Game/MultiplayerTesting/MultiplayerTestbed.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/_Game/MultiplayerTesting/MultiplayerTestbed 2.unity
+    guid: c30b93160b6f3e845a5d0246e63ec850
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
