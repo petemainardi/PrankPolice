@@ -27,11 +27,15 @@ namespace PrankPolice
         private Rigidbody _rb;
         private Collider _collider;
         private Transform _linkedTo;
+        public Transform LinkedObj => _linkedTo;
 
         private bool _defaultGravity;
         private RigidbodyConstraints _defaultConstraints;
+        private float _defaultDrag;
 
         public Rigidbody Rigidbody => _rb;
+
+        public event Action<bool> LinkedChanged;
         // ========================================================================================
         // Mono
         // ========================================================================================
@@ -41,6 +45,7 @@ namespace PrankPolice
             _rb = GetComponent<Rigidbody>();
             _defaultGravity = _rb.useGravity;
             _defaultConstraints = _rb.constraints;
+            _defaultDrag = _rb.drag;
 		}
         // ----------------------------------------------------------------------------------------
 		//void Start()
@@ -64,10 +69,13 @@ namespace PrankPolice
             if (_linkedTo != null || !transformToLink.TryGet(out ClientNetworkTransform t)) return;
 
             _linkedTo = t.transform;
+            LinkedChanged?.Invoke(true);
+
             _collider.enabled = false;
             _rb.velocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
             _rb.useGravity = false;
+            _rb.drag = 0;
             this.transform.position = _linkedTo.transform.position;
             this.transform.rotation = _linkedTo.transform.rotation;
         }
@@ -83,6 +91,8 @@ namespace PrankPolice
             _rb.constraints = _defaultConstraints;
             _rb.velocity = initialVelocity;
             _rb.angularVelocity = initialRotation;
+
+            LinkedChanged?.Invoke(false);
         }
         public void Unlink() => UnlinkServerRpc(Vector3.zero, Vector3.zero);
         public void Unlink(Vector3 initialVelocity, Vector3 initialRotation) =>

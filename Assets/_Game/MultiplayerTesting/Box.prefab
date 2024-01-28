@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 1276127515581308951}
   - component: {fileID: 145401271292664079}
   - component: {fileID: 5307074339814388166}
+  - component: {fileID: 8388534682408467234}
+  - component: {fileID: 552392779972504879}
   m_Layer: 0
   m_Name: Box
   m_TagString: Throwable
@@ -121,7 +123,7 @@ Rigidbody:
   m_GameObject: {fileID: 3744628363002707191}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -151,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1904199518
+  GlobalObjectIdHash: 2522944210
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -213,3 +215,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e87b4b1f05d75a44ca3787959c166b75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!195 &8388534682408467234
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3744628363002707191}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &552392779972504879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3744628363002707191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 524dbb45eeffe9d4383f82f12f77977d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyDistanceRun: 4
+  CanMove: 1

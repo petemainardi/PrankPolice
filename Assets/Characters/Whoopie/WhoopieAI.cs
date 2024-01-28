@@ -1,34 +1,77 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class WhoopieAI : MonoBehaviour
+namespace PrankPolice
 {
-    private NavMeshAgent _agent;
-
-    public GameObject Player;
-
-    public float EnemyDistanceRun = 4.0f;
-
-    // Start is called before the first frame update
-    void Start()
+    [RequireComponent(typeof(Linkable))]
+    public class WhoopieAI : NetworkBehaviour
     {
-        _agent = GetComponent<NavMeshAgent>();
-    }
+        private NavMeshAgent _agent;
+        private Linkable _linker;
 
-    // Update is called once per frame
-    void Update()
-    {
-        float distance = Vector3.Distance(transform.position, Player.transform.position);
+        public float EnemyDistanceRun = 4.0f;
 
-        if (distance < EnemyDistanceRun)
+        private Transform[] _players;
+
+        // Start is called before the first frame update
+        void Awake()
         {
-            Vector3 dirToPlayer = transform.position - Player.transform.position;
+            _agent = GetComponent<NavMeshAgent>();
+            _linker = GetComponent<Linkable>();
+            _linker.LinkedChanged += linked => { _agent.enabled = false; };
+            _linker.LinkedChanged += linked =>
+            {
+                if (linked)
+                    Debug.Log($"Linking {this.name} to {_linker.LinkedObj.name}");
+                else
+                    Debug.Log($"Unlinking {this.name}");
+            };
+        }
 
-            Vector3 newPos = transform.position + dirToPlayer;
+        public override void OnNetworkSpawn()
+        {
+            _players = GameObject.FindObjectsByType<FirstPersonMovement>(FindObjectsSortMode.None)
+                .Select(x => x.transform)
+                .ToArray();
+        }
 
-            _agent.SetDestination(newPos);
+        // Update is called once per frame
+        void Update()
+        {
+            if (!IsOwner || !_agent.enabled) return;
+
+            int target = 0;
+            float distance = float.MaxValue;
+            for (int i = 0; i < _players.Length; i++)
+            {
+                float dist = Vector3.Distance(transform.position, _players[i].position);
+                if (dist < distance)
+                {
+                    distance = dist;
+                    target = i;
+                }
+            }
+
+            if (distance < EnemyDistanceRun)
+            {
+                Vector3 dirToPlayer = transform.position - _players[target].position;
+
+                Vector3 newPos = transform.position + dirToPlayer;
+
+                _agent.SetDestination(newPos);
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.tag == "Ground")
+                _agent.enabled = true;
         }
     }
 }

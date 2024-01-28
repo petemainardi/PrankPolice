@@ -3,10 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
-using TMPro;
-using PrankPolice;
-using ThatNamespace;
-using UnityEditor.Rendering.BuiltIn.ShaderGraph;
 using Unity.Multiplayer.Samples.Utilities.ClientAuthority;
 
 #pragma warning disable 0649    // Variable declared but never assigned to
@@ -37,7 +33,8 @@ namespace PrankPolice
         [SerializeField] private float ThrowSpeed = 12;
         [SerializeField] private float FocusVariance = 2;
 
-        [SerializeField] private float GrabDistance = 4;
+        //[SerializeField] private float GrabDistance = 4;
+        [SerializeField] private GrabCollider GrabCollider;
         private Linkable _throwItem;
 
         [field: SerializeField] public float TimeToMaxThrow { get; private set; } = 2.2f;
@@ -88,14 +85,22 @@ namespace PrankPolice
             {
                 if (_throwItem != null && _throwTimer > ThrowThreshold)
                     Throw(_throwTimer / TimeToMaxThrow);
-                else
+                else if (_throwItem == null)
                 {
-                    RaycastHit[] hits = Physics.RaycastAll(Camera.transform.position, Camera.transform.forward, GrabDistance);
-                    //RaycastHit picked = hits.FirstOrDefault(hit => hit.transform.tag == "Throwable");
-                    RaycastHit picked = hits.FirstOrDefault(hit => hit.transform.GetComponent<Linkable>());
-                    if (picked.rigidbody != null)
-                        PickUp(picked.transform.GetComponent<Linkable>());
+                    //RaycastHit[] hits = Physics.RaycastAll(Camera.transform.position, Camera.transform.forward, GrabDistance);
+                    //RaycastHit picked = hits.FirstOrDefault(hit => hit.transform.GetComponent<Linkable>());
+                    //if (picked.rigidbody != null)
+                    //    PickUp(picked.transform.GetComponent<Linkable>());
+
+                    Collider target = GrabCollider.Colliders.FirstOrDefault(c => c.GetComponent<Linkable>());
+                    if (target != null)
+                    {
+                        PickUp(target.GetComponent<Linkable>());
+                        GrabCollider.Colliders.Remove(target);
+                    }
                 }
+                else
+                    Debug.Log($"Cannot pickup, currently holding {_throwItem.gameObject.name}");
 
                 _throwTimer = 0;
                 ThrowForceChanged?.Invoke(0);
@@ -106,6 +111,7 @@ namespace PrankPolice
         // ========================================================================================
 		public void PickUp(Linkable throwable)
         {
+            Debug.Log($"Picking up {throwable?.gameObject.name}");
             if (throwable == null) return;
 
             if (_throwItem != null)
